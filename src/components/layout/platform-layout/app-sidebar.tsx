@@ -10,13 +10,13 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
   IconUsers,
 } from '@tabler/icons-react'
+import Image from 'next/image'
 import * as React from 'react'
 
 import { NavDocuments } from '@/components/nav-documents'
@@ -161,7 +161,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
+                <Image
+                  src="/brand/favicon-32x32.png"
+                  alt="GuAskReal Logo"
+                  width={20}
+                  height={20}
+                  className="!size-5"
+                />
                 <span className="text-base font-semibold">GuAskReal Inc.</span>
               </a>
             </SidebarMenuButton>
