@@ -1,0 +1,69 @@
+{
+  "types": [
+    {
+      "type": "feat",
+      "section": "✨ Features"
+    },
+    {
+      "type": "feature",
+      "section": "✨ Features"
+    },
+    {
+      "type": "fix",
+      "section": "🐛 Bug Fixes"
+    },
+    {
+      "type": "perf",
+      "section": "⚡️ Performance Improvements"
+    },
+    {
+      "type": "docs",
+      "section": "📝 Documentation"
+    },
+    {
+      "type": "style",
+      "section": "🎨 Styles"
+    },
+    {
+      "type": "refactor",
+      "section": "♻️ Code Refactoring"
+    },
+    {
+      "type": "test",
+      "section": "🧪 Tests"
+    },
+    {
+      "type": "build",
+      "section": "🔧 Build System"
+    },
+    {
+      "type": "ci",
+      "section": "👷 CI"
+    },
+    {
+      "type": "chore",
+      "section": "🔨 Chores"
+    },
+    {
+      "type": "revert",
+      "section": "⏪ Reverts"
+    }
+  ],
+  "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
+  "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
+  "userUrlFormat": "{{host}}/{{user}}",
+  "releaseCommitMessageFormat": "chore(release): {{currentTag}}",
+  "skip": {
+    "bump": false,
+    "changelog": false,
+    "commit": false,
+    "tag": false
+  },
+  "bumpFiles": [
+    {
+      "filename": "package.json",
+      "type": "json"
+    }
+  ]
+}

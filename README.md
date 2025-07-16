@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Next Tools
 
-## Getting Started
+A Next.js 15 project with modern tooling and best practices.
 
-First, run the development server:
+## Development
+
+### Getting Started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Commit Messages & Changelog
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project uses conventional commits with emoji support for better commit messages and automatic changelog generation.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Making Commits
 
-## Learn More
+Use the following command to create properly formatted commits:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+bun run commit
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This will guide you through creating conventional commits with appropriate emojis:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🎨 **style** - Improving structure/format of code
+- ⚡️ **perf** - Improving performance
+- 🔥 **prune** - Removing code or files
+- 🐛 **fix** - Fixing a bug
+- 🚑 **quickfix** - Critical hotfix
+- ✨ **feature** - Introducing new features
+- 📝 **docs** - Writing docs
+- And many more!
 
-## Deploy on Vercel
+#### Changelog Management
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Generate initial changelog**: `bun run changelog:generate`
+- **Update changelog with new commits**: `bun run changelog:update`
+- **Create a new release**: `bun run release`
+- **Preview release changes**: `bun run release:dry-run`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The changelog is automatically generated from your commit messages following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
+
+### Other Scripts
+
+- `bun run lint` - Run ESLint
+- `bun run format` - Format code with Prettier
+- `bun run test` - Run tests
+- `bun run build` - Build for production
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Shadcn/ui
+- **Icons**: Lucide React
+- **Testing**: Vitest + React Testing Library
+- **Code Quality**: ESLint, Prettier, Husky
+- **Commit Standards**: Commitizen + cz-emoji
+- **Changelog**: conventional-changelog-cli + standard-version
