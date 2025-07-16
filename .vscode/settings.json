@@ -48,6 +48,8 @@
     "*.css": "tailwindcss"
   },
   "cSpell.words": [
+    "bunx",
+    "commitlint",
     "Firestore",
     "languagedetector",
     "NEXTAUTH",
