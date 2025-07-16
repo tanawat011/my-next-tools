@@ -1,7 +1,13 @@
-import { ThemeProvider } from "@/providers/theme-provider";
+import { AuthProvider } from '@/components/providers/auth-provider'
+import { QueryProvider } from '@/components/providers/query-provider'
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 
-
-export default function RootProvider({ children }: { children: React.ReactNode }) {
+export default function RootProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <>
       <ThemeProvider
@@ -10,7 +16,12 @@ export default function RootProvider({ children }: { children: React.ReactNode }
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <AuthProvider>
+          <QueryProvider>
+            {children}
+            <Toaster />
+          </QueryProvider>
+        </AuthProvider>
       </ThemeProvider>
     </>
   )

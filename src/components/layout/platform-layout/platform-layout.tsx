@@ -1,6 +1,7 @@
-import { SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "./app-sidebar";
-import { SiteHeader } from "@/components/site-header";
+import { SiteHeader } from '@/components/site-header'
+import { SidebarInset } from '@/components/ui/sidebar'
+
+import { AppSidebar } from './app-sidebar'
 
 export function PlatformLayout({ children }: { children: React.ReactNode }) {
   return (

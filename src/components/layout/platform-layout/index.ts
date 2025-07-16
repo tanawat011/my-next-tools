@@ -1,1 +1,1 @@
-export * from "./platform-layout";
+export * from './platform-layout'

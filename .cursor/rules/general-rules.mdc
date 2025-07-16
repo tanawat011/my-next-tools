@@ -1,14 +1,17 @@
 ---
 alwaysApply: true
 ---
+
 # General Rules for Our Project
 
 ## 1. Core Technology Stack
+
 - **Framework**: Always use Next.js version 15+ with the App Router.
 - **Language**: All code must be written in TypeScript. Use strong types for props, state, and function arguments/return values.
 - **Package Manager**: Always use `bun`. Any commands for installing dependencies must use `bun add [package]`. For running scripts, use `bun dev`, `bun build`, etc. For running packages, use `bunx`.
 
 ## 2. Component Philosophy & UI
+
 - **UI Library**: The primary UI library is **Shadcn UI**. DO NOT generate custom-styled components from scratch.
 - **Component Usage**:
   - To add a new component (e.g., alert-dialog, avatar, table), you must first instruct me to run the command: `bunx shadcn@latest add [component-name]`.
@@ -17,11 +20,13 @@ alwaysApply: true
 - **Icons**: For icons, use the `lucide-react` library. It is installed by default with Shadcn UI.
 
 ## 3. Styling
+
 - **Styling Method**: All styling must be done using **Tailwind CSS utility classes**.
 - **No Custom CSS**: Do not write custom CSS files or use inline `style={{}}` objects unless absolutely necessary for a dynamic value.
 - **Theme**: Adhere to the theme defined in `tailwind.config.ts`. Use theme colors like `primary`, `secondary`, `destructive`, `muted`, `accent`, etc.
 
 ## 4. Next.js App Router Conventions
+
 - **Server Components by Default**: All components should be React Server Components (RSCs) by default.
 - **Client Components**: Only add the `"use client"` directive at the top of a file if the component requires interactivity (e.g., using hooks like `useState`, `useEffect`, or handling browser events).
 - **File Structure**:
@@ -30,6 +35,102 @@ alwaysApply: true
 - **Data Fetching**: For data fetching in Server Components, use modern `async/await` syntax directly within the component.
 
 ## 5. Code Quality & Best Practices
+
 - **Comments**: Generate JSDoc comments for component props and complex functions to explain their purpose.
 - **Props**: Component props should be clearly defined in a `type` or `interface` right above the component definition.
 - **File Naming**: Use kebab-case for file and folder names (e.g., `user-profile/page.tsx`).
+
+## 6. Project Structure
+
+- **Folder Structure**:
+
+```text
+/
+├── .cursor/         # Cursor settings
+├── .vscode/         # Recommended VSCode settings
+├── .husky/          # Husky pre-commit hooks
+├── public/          # Static assets
+├── documentation/   # Documentation
+├── scripts/         # Scripts for development
+├── src/
+│   ├── app/         # Next.js App Router
+│   │   ├── (auth)/      # Routes for authentication (login, register)
+│   │   ├── (platform)/  # Protected routes after login
+│   │   │   ├── (main)/
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── dashboard/
+│   │   │   │       └── page.tsx      # Main dashboard page
+│   │   │   └── layout.tsx            # Main layout for the platform
+│   │   ├── api/                      # API routes (e.g., for webhooks, auth)
+│   │   └── layout.tsx              # Root layout
+│   ├── components/
+│   │   ├── form/                     # Form components (Login, Register, etc.)
+│   │   ├── layout/                   # Layout components (Header, Sidebar, Footer)
+│   │   ├── providers/                # All context providers (TanStack, Theme, etc.)
+│   │   ├── icons.tsx                 # Centralized icon exports
+│   │   └── ui/                       # shadcn/ui components (automatically generated)
+│   ├── constants/       # App-wide constants
+│   ├── features/        # Self-contained feature modules
+│   │   ├── auth/                     # Auth logic, components, hooks
+│   │   ├── dashboard-builder/        # Dashboard customization logic
+│   │   ├── crud-generator/           # Dynamic CRUD page logic
+│   │   └── rbac/                     # Role-Based Access Control logic
+│   ├── hooks/           # Custom reusable hooks
+│   ├── lib/
+│   │   ├── auth.ts                   # Auth.js configuration
+│   │   ├── firebase.ts               # Firebase client initialization
+│   │   ├── i18n/                     # Internationalization setup
+│   │   └── utils.ts                  # Shared utility functions
+│   ├── messages/        # Translation files (i18n)
+│   ├── plugins/         # Directory for plug-and-play tools
+│   │   └── json-comparer/            # Example plugin
+│   │       ├── components/
+│   │       ├── index.tsx             # Main plugin component
+│   │       └── plugin.config.ts      # Plugin metadata
+│   ├── store/           # Zustand stores
+│   ├── styles/          # Global CSS
+│   ├── types/           # TypeScript type definitions
+│   ├── tests/           # Testing configuration and tests
+│   └── views/           # Views for the app
+├── .env.example
+├── .prettierrc.json
+├── components.json      # shadcn/ui config
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── tsconfig.json
+└── vitest.config.ts
+```
+
+## 7. Project Naming Conventions
+
+- **Folder Naming**: Use kebab-case for folder names (e.g., `user-profile/page.tsx`).
+- **File Naming**: Use kebab-case for file names (e.g., `user-profile/page.tsx`).
+- **Component Naming**: Use kebab-case for component names (e.g., `user-profile/page.tsx`).
+- **Hook Naming**: Use kebab-case for hook names (e.g., `use-user-profile/page.tsx`).
+- **Store Naming**: Use kebab-case for store names (e.g., `user-profile/page.tsx`).
+- **Type Naming**: Use kebab-case for type names (e.g., `user-profile/page.tsx`).
+- **Constant Naming**: Use kebab-case for constant names (e.g., `user-profile/page.tsx`).
+
+## 8. Project Configuration
+
+- **Environment Variables**: Use `.env.local` for environment variables.
+- **TypeScript Configuration**: Use `tsconfig.json` for TypeScript configuration.
+- **ESLint Configuration**: Use `eslint.config.mjs` for ESLint configuration.
+- **Prettier Configuration**: Use `prettier.config.mjs` for Prettier configuration.
+- **Tailwind Configuration**: Use `tailwind.config.ts` for Tailwind configuration.
+- **PostCSS Configuration**: Use `postcss.config.mjs` for PostCSS configuration.
+
+## 9. Tech Stack
+
+- **Framework**: Next.js version 15+ with the App Router.
+- **Language**: TypeScript.
+- **Package Manager**: Bun.
+- **UI Library**: Shadcn UI.
+- **Icons**: Lucide React.
+- **Styling**: Tailwind CSS utility classes.
+- **Data Fetching**: Modern `async/await` syntax.
+- **Testing**: Jest.
+- **Internationalization**: i18next.
