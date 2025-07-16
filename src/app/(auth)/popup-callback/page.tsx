@@ -2,9 +2,9 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 
-export default function PopupCallbackPage() {
+function PopupCallbackContent() {
   const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -87,5 +87,27 @@ export default function PopupCallbackPage() {
         )}
       </div>
     </div>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <div className="bg-background flex min-h-screen items-center justify-center">
+      <div className="space-y-4 text-center">
+        <div className="border-primary mx-auto h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"></div>
+        <h2 className="text-lg font-semibold">Loading...</h2>
+        <p className="text-muted-foreground text-sm">
+          Preparing authentication...
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default function PopupCallbackPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <PopupCallbackContent />
+    </Suspense>
   )
 }
