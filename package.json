@@ -20,7 +20,14 @@
     "changelog:update": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release": "standard-version",
     "release:dry-run": "standard-version --dry-run",
-    "prepare": "husky"
+    "prepare": "husky",
+    "vercel:build": "next build",
+    "vercel:dev": "next dev",
+    "vercel:deploy": "vercel --prod",
+    "vercel:preview": "vercel",
+    "build:analyze": "cross-env ANALYZE=true next build",
+    "postbuild": "next-sitemap",
+    "deploy:check": "bun run lint && bun run format:check && bun run test && bun run build"
   },
   "dependencies": {
     "@auth/firebase-adapter": "^2.10.0",
