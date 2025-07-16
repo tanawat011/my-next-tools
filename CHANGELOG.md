@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### ✨ Features
+
+- Add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
+  - Added conventional-changelog-cli for automatic changelog generation
+  - Added standard-version for automated versioning and releases
+  - Created .versionrc.json for emoji-friendly changelog sections
+  - Updated README.md with changelog and commit instructions
+  - Created initial CHANGELOG.md with proper formatting
+
+### 🔧 Build System
 
 - Emoji support for commit messages via `cz-emoji`
-- Automatic changelog generation with `conventional-changelog-cli`
 - Automated versioning with `standard-version`
 
 ## [0.1.0] - 2025-07-16
