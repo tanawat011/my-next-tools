@@ -6,7 +6,7 @@ import { AppSidebar } from './app-sidebar'
 export function PlatformLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="floating" />
       <SidebarInset>
         <SiteHeader />
         {children}

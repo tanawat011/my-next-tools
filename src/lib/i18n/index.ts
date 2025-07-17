@@ -4,14 +4,14 @@ import { initReactI18next } from 'react-i18next'
 
 // Import translations
 import { en } from './locales/en'
-import { es } from './locales/es'
+import { th } from './locales/th'
 
 const resources = {
   en: {
     translation: en,
   },
-  es: {
-    translation: es,
+  th: {
+    translation: th,
   },
 }
 
