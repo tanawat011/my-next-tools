@@ -182,7 +182,7 @@ jobs:
 
       - name: 📤 Push changes
         run: |
-          git push origin main --follow-tags
+          git push origin main --follow-tags --no-verify
 
   github-release:
     name: 📋 Create GitHub Release

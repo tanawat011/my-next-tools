@@ -91,7 +91,7 @@ function preReleaseChecks() {
 }
 
 function performRelease(releaseType, options = {}) {
-  const { dryRun = false, prerelease = false } = options
+  const { dryRun = false, prerelease = false, skipHooks = true } = options
 
   log.title(`${dryRun ? 'DRY RUN: ' : ''}Performing ${releaseType} Release`)
 
@@ -121,7 +121,10 @@ function performRelease(releaseType, options = {}) {
     releaseCommand += ' --dry-run'
   }
 
-  // Run the release
+  // Run the release (skip hooks for automated commits)
+  if (skipHooks) {
+    process.env.HUSKY = '0' // Disable Husky for this process
+  }
   runCommand(releaseCommand)
 
   if (!dryRun) {
@@ -129,7 +132,8 @@ function performRelease(releaseType, options = {}) {
     log.success(`Release completed! Version: ${currentVersion} → ${newVersion}`)
 
     log.info('Pushing to remote repository...')
-    runCommand('git push --follow-tags origin main')
+    const pushCommand = `git push --follow-tags origin main${skipHooks ? ' --no-verify' : ''}`
+    runCommand(pushCommand)
     log.success('Changes pushed to remote repository')
 
     log.title('Release Summary')
@@ -156,15 +160,17 @@ Commands:
   help        Show this help message
 
 Options:
-  --dry-run   Perform a dry run without making changes
-  --alpha     Create an alpha prerelease
-  --beta      Create a beta prerelease
-  --rc        Create a release candidate
+  --dry-run          Perform a dry run without making changes
+  --alpha            Create an alpha prerelease
+  --beta             Create a beta prerelease
+  --rc               Create a release candidate
+  --no-skip-hooks    Don't skip git hooks (hooks are skipped by default)
 
 Examples:
   node scripts/release.js patch
   node scripts/release.js minor --dry-run
   node scripts/release.js prerelease --alpha
+  node scripts/release.js patch --no-skip-hooks
   node scripts/release.js check
 `)
 }
@@ -175,12 +181,13 @@ const command = args[0]
 const isDryRun = args.includes('--dry-run')
 const isBeta = args.includes('--beta')
 const isRC = args.includes('--rc')
+const skipHooksFlag = !args.includes('--no-skip-hooks') // Skip hooks by default
 
 switch (command) {
   case 'patch':
   case 'minor':
   case 'major':
-    performRelease(command, { dryRun: isDryRun })
+    performRelease(command, { dryRun: isDryRun, skipHooks: skipHooksFlag })
     break
 
   case 'prerelease':
@@ -190,11 +197,12 @@ switch (command) {
     performRelease('prerelease', {
       dryRun: isDryRun,
       prerelease: prereleaseType,
+      skipHooks: skipHooksFlag,
     })
     break
 
   case 'dry-run':
-    performRelease('patch', { dryRun: true })
+    performRelease('patch', { dryRun: true, skipHooks: skipHooksFlag })
     break
 
   case 'check':

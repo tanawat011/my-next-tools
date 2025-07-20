@@ -18,10 +18,15 @@ This project features a comprehensive changelog and release system with automate
 #### 🚀 Quick Release Commands
 
 ```bash
-# Create releases
+# Create releases (skip git hooks for speed)
 bun run release:patch    # 0.1.0 → 0.1.1
 bun run release:minor    # 0.1.0 → 0.2.0
 bun run release:major    # 0.1.0 → 1.0.0
+
+# Include git hooks (when needed)
+bun run release:patch:no-hooks
+bun run release:minor:no-hooks
+bun run release:major:no-hooks
 
 # Prereleases
 bun run release:alpha    # 0.1.0 → 0.1.1-alpha.0
@@ -63,7 +68,10 @@ Access the interactive changelog at `/changelog` with:
 - **Professional release notes** with contributor attribution
 - **Comprehensive CI/CD** with testing, linting, and security checks
 
-📖 **Full documentation**: See [CHANGELOG_GUIDE.md](./CHANGELOG_GUIDE.md) for complete usage instructions.
+📖 **Full documentation**:
+
+- [CHANGELOG_GUIDE.md](./CHANGELOG_GUIDE.md) - Complete usage instructions
+- [RELEASE_HOOKS.md](./RELEASE_HOOKS.md) - Git hooks configuration and control
 
 #### Making Commits
 

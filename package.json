@@ -1,6 +1,6 @@
 {
   "name": "my-next-shadcn",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -33,6 +33,9 @@
     "release:rc": "node scripts/release.js prerelease --rc",
     "release:dry-run": "node scripts/release.js dry-run",
     "release:check": "node scripts/release.js check",
+    "release:patch:no-hooks": "node scripts/release.js patch --no-skip-hooks",
+    "release:minor:no-hooks": "node scripts/release.js minor --no-skip-hooks",
+    "release:major:no-hooks": "node scripts/release.js major --no-skip-hooks",
     "release:notes": "node scripts/release-notes.js",
     "release:notes:save": "node scripts/release-notes.js --save",
     "prepare": "husky",

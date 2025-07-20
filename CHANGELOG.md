@@ -1,25 +1,61 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### 0.1.5 (2025-07-20)
 
-## [Unreleased]
+### 🔨 Chores
+
+- husky fix ([c1fcd60](https://github.com/tanawat011/my-next-tools/commit/c1fcd609c6a4d5a75370ba9d3562a2556940e792))
 
 ### ✨ Features
 
-- Add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
-  - Added conventional-changelog-cli for automatic changelog generation
-  - Added standard-version for automated versioning and releases
-  - Created .versionrc.json for emoji-friendly changelog sections
-  - Updated README.md with changelog and commit instructions
-  - Created initial CHANGELOG.md with proper formatting
+- add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
+- **component:** authentication system ([3796428](https://github.com/tanawat011/my-next-tools/commit/3796428d716c6b45a0242d464f1c2247ae68c034))
 
-### 🔧 Build System
+### 0.1.4 (2025-07-20)
 
-- Emoji support for commit messages via `cz-emoji`
-- Automated versioning with `standard-version`
+### 🔨 Chores
+
+- husky fix ([c1fcd60](https://github.com/tanawat011/my-next-tools/commit/c1fcd609c6a4d5a75370ba9d3562a2556940e792))
+
+### ✨ Features
+
+- add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
+- **component:** authentication system ([3796428](https://github.com/tanawat011/my-next-tools/commit/3796428d716c6b45a0242d464f1c2247ae68c034))
+
+### 0.1.3 (2025-07-20)
+
+### 🔨 Chores
+
+- husky fix ([c1fcd60](https://github.com/tanawat011/my-next-tools/commit/c1fcd609c6a4d5a75370ba9d3562a2556940e792))
+
+### ✨ Features
+
+- add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
+- **component:** authentication system ([3796428](https://github.com/tanawat011/my-next-tools/commit/3796428d716c6b45a0242d464f1c2247ae68c034))
+
+### 0.1.2 (2025-07-20)
+
+### 🔨 Chores
+
+- husky fix ([c1fcd60](https://github.com/tanawat011/my-next-tools/commit/c1fcd609c6a4d5a75370ba9d3562a2556940e792))
+
+### ✨ Features
+
+- add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
+- **component:** authentication system ([3796428](https://github.com/tanawat011/my-next-tools/commit/3796428d716c6b45a0242d464f1c2247ae68c034))
+
+### 0.1.1 (2025-07-20)
+
+### 🔨 Chores
+
+- husky fix ([c1fcd60](https://github.com/tanawat011/my-next-tools/commit/c1fcd609c6a4d5a75370ba9d3562a2556940e792))
+
+### ✨ Features
+
+- add automatic changelog generation ([32166bf](https://github.com/tanawat011/my-next-tools/commit/32166bf0c45e77d41160856c6d8e73103591240a))
+- **component:** authentication system ([3796428](https://github.com/tanawat011/my-next-tools/commit/3796428d716c6b45a0242d464f1c2247ae68c034))
 
 ## [0.1.0] - 2025-07-16
 

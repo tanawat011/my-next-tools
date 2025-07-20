@@ -1,0 +1,15 @@
+# Husky Ignore Configuration
+# This file specifies which files/patterns should skip git hooks
+
+# Release-related commits (when HUSKY=0 is set)
+# - Version bump commits
+# - Changelog updates
+# - Tag creation
+
+# You can also disable Husky per command:
+# HUSKY=0 git commit -m "release: v1.0.0"
+# git commit --no-verify -m "release: v1.0.0"
+
+# Or use our release scripts which handle this automatically:
+# bun run release:patch  (skips hooks by default)
+# bun run release:patch:no-hooks  (includes hooks)
