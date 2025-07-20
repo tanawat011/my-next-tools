@@ -18,23 +18,24 @@ export const NAV_MAIN = [
     url: '#',
     icon: IconFolder,
   },
-  {
-    title: 'Users',
-    url: '#',
-    icon: IconUsers,
-  },
 ]
 
 export const NAV_SECONDARY = [
   {
-    title: 'Settings',
-    url: '#',
+    title: 'Users',
+    url: '/users',
+    icon: IconUsers,
+  },
+  {
+    title: 'Global Settings',
+    url: '/global-settings',
     icon: IconSettings,
   },
   {
     title: 'About Us',
     url: '#',
     icon: IconHelp,
+    type: 'modal',
   },
   {
     title: 'Search',

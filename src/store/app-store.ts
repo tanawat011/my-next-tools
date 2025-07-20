@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 interface AppState {
   sidebarOpen: boolean
   theme: 'light' | 'dark' | 'system'
-  language: 'en' | 'es'
+  language: 'en' | 'th'
   notifications: Array<{
     id: string
     type: 'success' | 'error' | 'warning' | 'info'
@@ -14,7 +14,7 @@ interface AppState {
   }>
   setSidebarOpen: (open: boolean) => void
   setTheme: (theme: 'light' | 'dark' | 'system') => void
-  setLanguage: (language: 'en' | 'es') => void
+  setLanguage: (language: 'en' | 'th') => void
   addNotification: (notification: {
     type: 'success' | 'error' | 'warning' | 'info'
     title: string

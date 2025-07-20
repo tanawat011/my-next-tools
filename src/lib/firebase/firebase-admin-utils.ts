@@ -4,8 +4,12 @@ import {
   deleteDoc,
   collection,
   getDocs,
+  query,
+  where,
   DocumentData,
 } from 'firebase/firestore'
+
+import { generateUserId } from '@/lib/utils/uuid'
 
 import { db } from './firebase'
 
@@ -14,6 +18,9 @@ export interface CreateUserData {
   displayName?: string
   photoURL?: string
   role?: string
+  provider?: string
+  emailVerified?: boolean
+  lastSignIn?: Date
 }
 
 export interface FirestoreUserData extends DocumentData {
@@ -35,20 +42,25 @@ export async function addUserToFirebase(
   userData: CreateUserData
 ): Promise<boolean> {
   try {
-    const userRef = doc(db, 'users', userData.email)
+    // Generate UUID V7 for user ID
+    const userId = generateUserId()
+    const userRef = doc(db, 'users', userId)
 
     const userDoc = {
+      id: userId,
       email: userData.email,
       displayName: userData.displayName || '',
       photoURL: userData.photoURL || '',
       role: userData.role || 'user',
+      provider: userData.provider || '',
+      emailVerified: userData.emailVerified ?? false,
       createdAt: new Date(),
-      lastSignIn: null,
+      lastSignIn: userData.lastSignIn || new Date(),
       isActive: true,
     }
 
     await setDoc(userRef, userDoc)
-    console.info(`User ${userData.email} added successfully`)
+    console.info(`User ${userData.email} added successfully with ID: ${userId}`)
     return true
   } catch (error) {
     console.error('Error adding user to Firebase:', error)
@@ -61,8 +73,18 @@ export async function addUserToFirebase(
  */
 export async function removeUserFromFirebase(email: string): Promise<boolean> {
   try {
-    const userRef = doc(db, 'users', email)
-    await deleteDoc(userRef)
+    // First, find the user by email to get their UUID
+    const q = query(collection(db, 'users'), where('email', '==', email))
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      console.error(`User with email ${email} not found`)
+      return false
+    }
+
+    // Delete the user document using their UUID
+    const userDoc = querySnapshot.docs[0]
+    await deleteDoc(userDoc.ref)
     console.info(`User ${email} removed successfully`)
     return true
   } catch (error) {

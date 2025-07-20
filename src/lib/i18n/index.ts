@@ -15,20 +15,29 @@ const resources = {
   },
 }
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: 'en',
-    debug: process.env.NODE_ENV === 'development',
-    interpolation: {
-      escapeValue: false,
+// Configure i18n but don't initialize it immediately
+i18n.use(LanguageDetector).use(initReactI18next)
+
+export const i18nConfig = {
+  resources,
+  fallbackLng: 'en',
+  debug: process.env.NODE_ENV === 'development',
+  interpolation: {
+    escapeValue: false,
+  },
+  detection: {
+    order: ['cookie', 'localStorage', 'navigator'],
+    caches: ['cookie', 'localStorage'],
+    cookieMinutes: 525600, // 1 year
+    cookieDomain: undefined,
+    cookieOptions: {
+      path: '/',
+      sameSite: 'lax' as const,
     },
-    detection: {
-      order: ['localStorage', 'cookie', 'navigator'],
-      caches: ['localStorage', 'cookie'],
-    },
-  })
+  },
+}
+
+// Initialize with default config
+i18n.init(i18nConfig)
 
 export default i18n

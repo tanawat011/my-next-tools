@@ -19,7 +19,35 @@ export default withAuth(
       return NextResponse.redirect(new URL('/signin', req.url))
     }
 
-    return NextResponse.next()
+    // Handle language detection and cookie setting
+    const response = NextResponse.next()
+
+    // Get existing language cookie
+    const languageCookie = req.cookies.get('i18next')?.value
+
+    // If no language cookie exists, try to detect from Accept-Language header
+    if (!languageCookie) {
+      const acceptLanguage = req.headers.get('accept-language')
+      let detectedLanguage = 'en' // default
+
+      if (acceptLanguage) {
+        // Simple language detection - prioritize Thai if found
+        if (acceptLanguage.includes('th')) {
+          detectedLanguage = 'th'
+        } else if (acceptLanguage.includes('en')) {
+          detectedLanguage = 'en'
+        }
+      }
+
+      // Set the language cookie
+      response.cookies.set('i18next', detectedLanguage, {
+        path: '/',
+        maxAge: 31536000, // 1 year
+        sameSite: 'lax',
+      })
+    }
+
+    return response
   },
   {
     callbacks: {

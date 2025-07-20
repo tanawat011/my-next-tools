@@ -3,9 +3,9 @@
 import Image from 'next/image'
 import * as React from 'react'
 
-import { NavMain } from '@/components/nav-main'
-import { NavSecondary } from '@/components/nav-secondary'
-import { NavUser } from '@/components/nav-user'
+import { NavMain } from '@/components/layout/platform-layout/nav-main'
+import { NavSecondary } from '@/components/layout/platform-layout/nav-secondary'
+import { NavUser } from '@/components/layout/platform-layout/nav-user'
 import {
   Sidebar,
   SidebarContent,

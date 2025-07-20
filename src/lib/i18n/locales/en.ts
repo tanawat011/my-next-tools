@@ -9,6 +9,9 @@ export const en = {
     confirm: 'Confirm',
     error: 'Error',
     success: 'Success',
+    search: {
+      placeholder: 'Search...',
+    },
   },
   auth: {
     login: 'Login',

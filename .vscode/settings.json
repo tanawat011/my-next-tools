@@ -53,10 +53,12 @@
     "Firestore",
     "languagedetector",
     "NEXTAUTH",
+    "partialize",
     "shadcn",
     "sonner",
     "tabler",
     "turbopack",
+    "uuidv",
     "vaul",
     "VERCEL"
   ]

@@ -68,6 +68,7 @@ alwaysApply: true
 │   │   ├── layout/                   # Layout components (Header, Sidebar, Footer)
 │   │   ├── providers/                # All context providers (TanStack, Theme, etc.)
 │   │   ├── icons.tsx                 # Centralized icon exports
+│   │   ├── views/                    # Views for the app
 │   │   └── ui/                       # shadcn/ui components (automatically generated)
 │   ├── constants/       # App-wide constants
 │   ├── features/        # Self-contained feature modules
@@ -80,6 +81,8 @@ alwaysApply: true
 │   │   ├── auth.ts                   # Auth.js configuration
 │   │   ├── firebase.ts               # Firebase client initialization
 │   │   ├── i18n/                     # Internationalization setup
+│   │   │   ├── index.ts              # Main i18n config
+│   │   │   └── locales/              # Translation files (i18n)
 │   │   └── utils.ts                  # Shared utility functions
 │   ├── messages/        # Translation files (i18n)
 │   ├── plugins/         # Directory for plug-and-play tools
@@ -90,8 +93,7 @@ alwaysApply: true
 │   ├── store/           # Zustand stores
 │   ├── styles/          # Global CSS
 │   ├── types/           # TypeScript type definitions
-│   ├── tests/           # Testing configuration and tests
-│   └── views/           # Views for the app
+│   └── tests/           # Testing configuration and tests
 ├── .env.example
 ├── .prettierrc.json
 ├── components.json      # shadcn/ui config
@@ -134,3 +136,10 @@ alwaysApply: true
 - **Data Fetching**: Modern `async/await` syntax.
 - **Testing**: Jest.
 - **Internationalization**: i18next.
+
+## 10. Workflow rules for creating a new page
+
+- The `app` directory is the main directory for the app router.
+- The `app router` will call the page view in the `components/views` directory.
+- The `components/views` directory is the main directory for the page view.
+- The various components will be gathered in the `components/views/*` component.

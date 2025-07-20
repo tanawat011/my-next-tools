@@ -9,6 +9,9 @@ export const th = {
     confirm: 'ยืนยัน',
     error: 'เกิดข้อผิดพลาด',
     success: 'สำเร็จ',
+    search: {
+      placeholder: 'ค้นหา...',
+    },
   },
   auth: {
     login: 'เข้าสู่ระบบ',

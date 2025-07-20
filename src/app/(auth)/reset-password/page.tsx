@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { ResetPasswordView } from '@/views/auth/reset-password'
+import { ResetPasswordView } from '@/components/views/auth/reset-password'
 
 export default function ResetPasswordPage() {
   return (

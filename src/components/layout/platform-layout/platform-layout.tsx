@@ -1,15 +1,27 @@
-import { SiteHeader } from '@/components/site-header'
+'use client'
+
+import { SiteHeader } from '@/components/layout/platform-layout/site-header'
 import { SidebarInset } from '@/components/ui/sidebar'
+import { Language } from '@/lib/server-preferences'
 
 import { AppSidebar } from './app-sidebar'
+import { ContentContainer } from './content-container'
 
-export function PlatformLayout({ children }: { children: React.ReactNode }) {
+interface PlatformLayoutProps {
+  children: React.ReactNode
+  initialLanguage?: Language
+}
+
+export function PlatformLayout({
+  children,
+  initialLanguage,
+}: PlatformLayoutProps) {
   return (
     <>
       <AppSidebar variant="floating" />
       <SidebarInset>
-        <SiteHeader />
-        {children}
+        <SiteHeader initialLanguage={initialLanguage} />
+        <ContentContainer>{children}</ContentContainer>
       </SidebarInset>
     </>
   )

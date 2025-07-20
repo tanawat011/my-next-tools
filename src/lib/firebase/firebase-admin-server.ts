@@ -1,4 +1,4 @@
-import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { setDoc, query, collection, where, getDocs } from 'firebase/firestore'
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app'
 import { getAuth, CreateRequest } from 'firebase-admin/auth'
 
@@ -49,6 +49,9 @@ export interface OAuthUser {
   name?: string
   image?: string
   id?: string
+  provider?: string
+  emailVerified?: boolean
+  lastSignIn?: Date
 }
 
 export interface AuthResult {
@@ -61,11 +64,9 @@ export interface AuthResult {
  * Create OAuth user in Firebase Authentication using Admin SDK
  * This function should only be called on the server side
  */
-export async function createOAuthUserInFirebaseAuth(user: {
-  email: string
-  name?: string
-  image?: string
-}): Promise<AuthResult> {
+export async function createOAuthUserInFirebaseAuth(
+  user: OAuthUser
+): Promise<AuthResult> {
   try {
     // This function should only be called on the server side
     if (typeof window !== 'undefined') {
@@ -90,6 +91,7 @@ export async function createOAuthUserInFirebaseAuth(user: {
         (error as { code: string }).code === 'auth/user-not-found'
       ) {
         const createUserPayload: CreateRequest = {
+          ...user,
           email: user.email,
           emailVerified: true, // OAuth users typically have verified emails
         }
@@ -128,8 +130,9 @@ export async function createOAuthUserInFirebaseAuth(user: {
  */
 async function checkUserExists(email: string): Promise<boolean> {
   try {
-    const userDoc = await getDoc(doc(db, 'users', email))
-    return userDoc.exists()
+    const q = query(collection(db, 'users'), where('email', '==', email))
+    const querySnapshot = await getDocs(q)
+    return !querySnapshot.empty
   } catch (error) {
     console.error('Error checking user existence:', error)
     return false
@@ -147,33 +150,21 @@ export async function handleOAuthUserServer(user: OAuthUser): Promise<boolean> {
     // Check if user already exists in Firestore
     const userExists = await checkUserExists(user.email)
 
+    const defaultData = {
+      email: user.email,
+      displayName: user.name || '',
+      photoURL: user.image || '',
+      role: 'user',
+      provider: user.provider || '',
+      emailVerified: user.emailVerified ?? false,
+      lastSignIn: user.lastSignIn || new Date(),
+    }
+
     if (!userExists) {
-      // Create user in Firebase Authentication using Admin SDK
-      const authResult = await createOAuthUserInFirebaseAuth({
-        email: user.email,
-        name: user.name || '',
-        image: user.image || '',
-      })
-
-      if (!authResult.success) {
-        console.error(
-          'Failed to create OAuth user in Firebase Auth:',
-          authResult.error
-        )
-        // Continue to Firestore creation anyway for backward compatibility
-      } else {
-        console.info(
-          'Successfully created OAuth user in Firebase Auth:',
-          authResult.uid
-        )
-      }
-
       // Add new OAuth user to Firestore
       const success = await addUserToFirebase({
-        email: user.email,
-        displayName: user.name || '',
-        photoURL: user.image || '',
-        role: 'user',
+        ...user,
+        ...defaultData,
       })
 
       if (!success) {
@@ -181,14 +172,40 @@ export async function handleOAuthUserServer(user: OAuthUser): Promise<boolean> {
         return false
       }
     } else {
-      // Update last sign-in time for existing user
-      await setDoc(
-        doc(db, 'users', user.email),
-        {
-          lastSignIn: new Date(),
-        },
-        { merge: true }
-      )
+      // Update lastSignIn and photoURL for existing user
+      // First find the user by email to get their UUID
+      const q = query(collection(db, 'users'), where('email', '==', user.email))
+      const querySnapshot = await getDocs(q)
+
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0]
+        await setDoc(
+          userDoc.ref,
+          {
+            lastSignIn: user.lastSignIn || new Date(),
+            photoURL: user.image || '',
+          },
+          { merge: true }
+        )
+      }
+    }
+
+    // Check if user is active and email is verified
+    const q = query(collection(db, 'users'), where('email', '==', user.email))
+    const querySnapshot = await getDocs(q)
+
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data()
+
+      if (!userData.isActive) {
+        console.error(`User ${user.email} is not active`)
+        return false
+      }
+
+      if (!userData.emailVerified) {
+        console.error(`User ${user.email} email is not verified`)
+        return false
+      }
     }
 
     return true
