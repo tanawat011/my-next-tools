@@ -1,6 +1,5 @@
 'use client'
 
-import { type Icon } from '@tabler/icons-react'
 import * as React from 'react'
 
 import { AboutDialog } from '@/components/shared/about-dialog'
@@ -12,17 +11,14 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-export function NavSecondary({
-  items,
-  ...props
-}: {
-  items: {
-    title: string
-    url: string
-    icon: Icon
-    type?: 'modal' | 'sidebar-item'
-  }[]
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+import { SidebarNavItem } from './types'
+
+export interface NavSecondaryProps
+  extends React.ComponentPropsWithoutRef<typeof SidebarGroup> {
+  items: SidebarNavItem[]
+}
+
+export function NavSecondary({ items, ...props }: NavSecondaryProps) {
   const [showAboutDialog, setShowAboutDialog] = React.useState(false)
 
   const handleItemClick = (item: { title: string; url: string }) => {

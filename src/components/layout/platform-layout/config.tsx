@@ -7,7 +7,9 @@ import {
   IconUsers,
 } from '@tabler/icons-react'
 
-export const NAV_MAIN = [
+import { SidebarNavItem } from './types'
+
+export const NAV_MAIN: SidebarNavItem[] = [
   {
     title: 'Dashboard',
     url: '/',
@@ -20,7 +22,7 @@ export const NAV_MAIN = [
   },
 ]
 
-export const NAV_SECONDARY = [
+export const NAV_SECONDARY: SidebarNavItem[] = [
   {
     title: 'Users',
     url: '/users',
@@ -44,24 +46,24 @@ export const NAV_SECONDARY = [
   },
 ]
 
-export const NAV_DOCUMENTS = [
+export const NAV_DOCUMENTS: SidebarNavItem[] = [
   {
-    name: 'Introduction',
+    title: 'Introduction',
     url: '#',
     icon: IconFolder,
   },
   {
-    name: 'Getting Started',
+    title: 'Getting Started',
     url: '#',
     icon: IconFolder,
   },
   {
-    name: 'User Guide',
+    title: 'User Guide',
     url: '#',
     icon: IconFolder,
   },
   {
-    name: 'API Reference',
+    title: 'API Reference',
     url: '#',
     icon: IconFolder,
   },

@@ -1,7 +1,5 @@
 'use client'
 
-import { type Icon } from '@tabler/icons-react'
-
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -10,15 +8,9 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: Icon
-  }[]
-}) {
+import { SidebarNavItem } from './types'
+
+export function NavMain({ items }: { items: SidebarNavItem[] }) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
