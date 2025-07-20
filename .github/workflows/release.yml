@@ -1,0 +1,250 @@
+name: 🚀 Release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.github/**'
+      - 'docs/**'
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-changes:
+    name: 📋 Check for Releasable Changes
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      has_feat: ${{ steps.check.outputs.has_feat }}
+      has_fix: ${{ steps.check.outputs.has_fix }}
+      has_breaking: ${{ steps.check.outputs.has_breaking }}
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check commit messages for release-worthy changes
+        id: check
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            # No previous tags, check all commits
+            COMMITS=$(git log --oneline --pretty=format:"%s")
+          else
+            # Check commits since last tag
+            COMMITS=$(git log ${LAST_TAG}..HEAD --oneline --pretty=format:"%s")
+          fi
+
+          echo "Recent commits:"
+          echo "$COMMITS"
+
+          # Check for different types of changes
+          HAS_FEAT=$(echo "$COMMITS" | grep -E "^(feat|feature)(\(.+\))?:" || echo "")
+          HAS_FIX=$(echo "$COMMITS" | grep -E "^fix(\(.+\))?:" || echo "")
+          HAS_BREAKING=$(echo "$COMMITS" | grep -E "BREAKING CHANGE|!" || echo "")
+          HAS_RELEASABLE=$(echo "$COMMITS" | grep -E "^(feat|feature|fix|perf)(\(.+\))?:" || echo "")
+
+          # Determine if we should release
+          SHOULD_RELEASE="false"
+          if [ -n "$HAS_RELEASABLE" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            SHOULD_RELEASE="true"
+          fi
+
+          echo "should_release=${SHOULD_RELEASE}" >> $GITHUB_OUTPUT
+          echo "has_feat=${HAS_FEAT:+true}" >> $GITHUB_OUTPUT
+          echo "has_fix=${HAS_FIX:+true}" >> $GITHUB_OUTPUT
+          echo "has_breaking=${HAS_BREAKING:+true}" >> $GITHUB_OUTPUT
+
+          echo "Should release: ${SHOULD_RELEASE}"
+          echo "Has features: ${HAS_FEAT:+true}"
+          echo "Has fixes: ${HAS_FIX:+true}"
+          echo "Has breaking changes: ${HAS_BREAKING:+true}"
+
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: needs.check-changes.outputs.should_release == 'true'
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🔍 Type checking
+        run: bun run type-check
+
+      - name: 🎨 Linting
+        run: bun run lint
+
+      - name: 🧪 Run tests
+        run: bun run test
+
+      - name: 🏗️ Build
+        run: bun run build
+
+  release:
+    name: 🚀 Release
+    runs-on: ubuntu-latest
+    needs: [check-changes, test]
+    if: needs.check-changes.outputs.should_release == 'true'
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+      changelog: ${{ steps.release.outputs.changelog }}
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: ⚙️ Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 🔄 Determine release type
+        id: release_type
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            RELEASE_TYPE="${{ github.event.inputs.release_type }}"
+          elif [ "${{ needs.check-changes.outputs.has_breaking }}" == "true" ]; then
+            RELEASE_TYPE="major"
+          elif [ "${{ needs.check-changes.outputs.has_feat }}" == "true" ]; then
+            RELEASE_TYPE="minor"
+          else
+            RELEASE_TYPE="patch"
+          fi
+
+          echo "release_type=${RELEASE_TYPE}" >> $GITHUB_OUTPUT
+          echo "Determined release type: ${RELEASE_TYPE}"
+
+      - name: 🚀 Run release
+        id: release
+        run: |
+          # Run our enhanced release script
+          RELEASE_OUTPUT=$(node scripts/release.js ${{ steps.release_type.outputs.release_type }} 2>&1)
+          echo "$RELEASE_OUTPUT"
+
+          # Get the new version from package.json
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          NEW_TAG="v${NEW_VERSION}"
+
+          echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=${NEW_TAG}" >> $GITHUB_OUTPUT
+
+          # Extract changelog for this version (simplified)
+          CHANGELOG_CONTENT="## What's Changed\n\nSee the full [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details."
+          echo "changelog=${CHANGELOG_CONTENT}" >> $GITHUB_OUTPUT
+
+          echo "Released version: ${NEW_VERSION}"
+          echo "Created tag: ${NEW_TAG}"
+
+      - name: 📤 Push changes
+        run: |
+          git push origin main --follow-tags
+
+  github-release:
+    name: 📋 Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [release]
+    if: always() && needs.release.outputs.version != ''
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📝 Generate Release Notes
+        id: release_notes
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            COMMITS=$(git log --oneline --pretty=format:"* %s (%h)" HEAD)
+          else
+            COMMITS=$(git log ${LAST_TAG}..HEAD --oneline --pretty=format:"* %s (%h)")
+          fi
+
+          # Create release notes
+          cat > release_notes.md << EOF
+          ## 🎉 Release ${{ needs.release.outputs.version }}
+
+          ### 📋 What's Changed
+
+          $COMMITS
+
+          ### 📖 Full Changelog
+
+          See the [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for complete details.
+
+          ---
+
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${LAST_TAG}...${{ needs.release.outputs.tag }}
+          EOF
+
+          echo "Release notes created"
+
+      - name: 🎁 Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.release.outputs.tag }}
+          release_name: 🚀 Release ${{ needs.release.outputs.version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: ${{ contains(needs.release.outputs.version, '-') }}
+
+  notify:
+    name: 📢 Notify
+    runs-on: ubuntu-latest
+    needs: [release, github-release]
+    if: always() && needs.release.outputs.version != ''
+    steps:
+      - name: 📢 Release notification
+        run: |
+          echo "🎉 Successfully released version ${{ needs.release.outputs.version }}"
+          echo "🔗 Release: https://github.com/${{ github.repository }}/releases/tag/${{ needs.release.outputs.tag }}"
+          echo "📝 Changelog: https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md"

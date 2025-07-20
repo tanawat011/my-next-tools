@@ -11,37 +11,75 @@ bun install
 bun dev
 ```
 
-### Commit Messages & Changelog
+### 📝 Enhanced Changelog & Release System
 
-This project uses conventional commits with emoji support for better commit messages and automatic changelog generation.
+This project features a comprehensive changelog and release system with automated workflows, beautiful UI components, and powerful management tools.
+
+#### 🚀 Quick Release Commands
+
+```bash
+# Create releases
+bun run release:patch    # 0.1.0 → 0.1.1
+bun run release:minor    # 0.1.0 → 0.2.0
+bun run release:major    # 0.1.0 → 1.0.0
+
+# Prereleases
+bun run release:alpha    # 0.1.0 → 0.1.1-alpha.0
+bun run release:beta     # 0.1.0 → 0.1.1-beta.0
+bun run release:rc       # 0.1.0 → 0.1.1-rc.0
+
+# Safety checks
+bun run release:dry-run  # Preview changes
+bun run release:check    # Run all pre-release checks
+```
+
+#### 📋 Changelog Management
+
+```bash
+# Validation & formatting
+bun run changelog:validate  # Check format
+bun run changelog:format    # Auto-format
+bun run changelog:backup    # Create backup
+bun run changelog:stats     # Show statistics
+
+# Release notes
+bun run release:notes       # Generate release notes
+bun run release:notes:save  # Save to file
+```
+
+#### 🎨 Beautiful Changelog Viewer
+
+Access the interactive changelog at `/changelog` with:
+
+- 🔍 Search functionality
+- 📂 Collapsible sections
+- 🏷️ Color-coded categories
+- 🔗 Direct commit links
+
+#### ✨ Automated Workflows
+
+- **GitHub Actions** automatically handle releases on main branch pushes
+- **Smart version detection** based on conventional commits
+- **Professional release notes** with contributor attribution
+- **Comprehensive CI/CD** with testing, linting, and security checks
+
+📖 **Full documentation**: See [CHANGELOG_GUIDE.md](./CHANGELOG_GUIDE.md) for complete usage instructions.
 
 #### Making Commits
 
-Use the following command to create properly formatted commits:
+Use conventional commits for automatic changelog generation:
 
 ```bash
-bun run commit
+bun run commit  # Interactive commit helper
 ```
 
-This will guide you through creating conventional commits with appropriate emojis:
+**Examples:**
 
-- 🎨 **style** - Improving structure/format of code
-- ⚡️ **perf** - Improving performance
-- 🔥 **prune** - Removing code or files
-- 🐛 **fix** - Fixing a bug
-- 🚑 **quickfix** - Critical hotfix
-- ✨ **feature** - Introducing new features
-- 📝 **docs** - Writing docs
-- And many more!
-
-#### Changelog Management
-
-- **Generate initial changelog**: `bun run changelog:generate`
-- **Update changelog with new commits**: `bun run changelog:update`
-- **Create a new release**: `bun run release`
-- **Preview release changes**: `bun run release:dry-run`
-
-The changelog is automatically generated from your commit messages following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
+```bash
+git commit -m "feat: add user authentication"
+git commit -m "fix: resolve login redirect issue"
+git commit -m "feat!: redesign API (BREAKING CHANGE)"
+```
 
 ### Other Scripts
 
